@@ -40,7 +40,7 @@ pwsh -NoProfile -File .\VanishTotal.ps1 -Path 'C:\Path\To\File.exe' -ShowAllEngi
 
 The context menu adds a `Scan with VanishTotal` submenu for files. It includes:
 
-- `Normal scan (lookup only)`
+- `Normal scan`
 - `Scan and upload if unknown`
 
 ## API Key
