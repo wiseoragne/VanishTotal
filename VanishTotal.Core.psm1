@@ -536,6 +536,7 @@ function Measure-VTRisk {
         [object]$Attributes,
 
         [Parameter(Mandatory)]
+        [AllowEmptyCollection()]
         [object[]]$Assessments,
 
         [Parameter(Mandatory)]
@@ -889,6 +890,7 @@ function New-VTStructuredReport {
         [object]$Attributes,
 
         [AllowNull()]
+        [AllowEmptyCollection()]
         [object[]]$Assessments,
 
         [AllowNull()]

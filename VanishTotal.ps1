@@ -16,8 +16,6 @@ param(
 
     [switch]$NoColor,
 
-    [switch]$ShowAllEngines,
-
     [string]$JsonReportPath,
 
     [ValidateRange(1, 300)]
@@ -112,21 +110,6 @@ function Get-CategoryColor {
         'harmless'   { $script:Colors.Good; break }
         'undetected' { $script:Colors.Info; break }
         default      { $script:Colors.Neutral; break }
-    }
-}
-
-function Get-CategoryRank {
-    param(
-        [AllowNull()]
-        [string]$Category
-    )
-
-    switch ($Category) {
-        'malicious'  { 0; break }
-        'suspicious' { 1; break }
-        'harmless'   { 2; break }
-        'undetected' { 3; break }
-        default      { 4; break }
     }
 }
 
@@ -346,23 +329,16 @@ try {
     Write-KeyValue -Key 'First seen' -Value (ConvertFrom-UnixTime -Value (Get-VTPropertyValue -InputObject $attributes -Name 'first_submission_date'))
     Write-KeyValue -Key 'Last seen' -Value (ConvertFrom-UnixTime -Value (Get-VTPropertyValue -InputObject $attributes -Name 'last_submission_date'))
 
-    $visibleAssessments = if ($ShowAllEngines) {
-        @($assessments)
-    }
-    else {
-        @($assessments | Where-Object { $_.EffectiveCategory -in @('malicious', 'suspicious') })
-    }
+    Write-Section 'Engine Verdicts'
 
-    Write-Section $(if ($ShowAllEngines) { 'Engine Verdicts' } else { 'Detections' })
-
-    if ($visibleAssessments.Count -eq 0) {
-        Write-Ansi 'No engines classified this file as malicious or suspicious.' $script:Colors.Good
+    if ($assessments.Count -eq 0) {
+        Write-Ansi 'VirusTotal did not return per-engine verdicts for this file.' $script:Colors.Warn
     }
     else {
         Write-Ansi ('{0,-28} {1,-20} {2}' -f 'Engine', 'Classification', 'Result') $script:Colors.Muted
         Write-Ansi ('{0,-28} {1,-20} {2}' -f ('-' * 26), ('-' * 18), ('-' * 30)) $script:Colors.Muted
 
-        foreach ($assessment in $visibleAssessments | Sort-Object @{ Expression = { Get-CategoryRank -Category $_.EffectiveCategory } }, Engine) {
+        foreach ($assessment in $assessments | Sort-Object Engine) {
             $classification = Format-Classification -Category $assessment.EffectiveCategory
 
             $resultText = if ([string]::IsNullOrWhiteSpace($assessment.Result)) {

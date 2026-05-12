@@ -28,19 +28,13 @@ To export an automation-friendly JSON report:
 pwsh -NoProfile -File .\VanishTotal.ps1 -Path 'C:\Path\To\File.exe' -JsonReportPath '.\reports\sample.json' -NoPause
 ```
 
-To show every engine result in the console instead of only detections:
-
-```powershell
-pwsh -NoProfile -File .\VanishTotal.ps1 -Path 'C:\Path\To\File.exe' -ShowAllEngines
-```
-
 ## Explorer Context Menu
 
 `Add_VT_Context_Menu.reg` is a generic template for GitHub. Before importing it, replace `C:\Path\To\VanishTotal\VanishTotal.ps1` with the full path to your local `VanishTotal.ps1`.
 
 The context menu adds a `Scan with VanishTotal` submenu for files. It includes:
 
-- `Normal scan (lookup only)`
+- `Normal scan`
 - `Scan and upload if unknown`
 
 ## API Key
@@ -65,7 +59,7 @@ You can also pass `-ApiKey` or use `-StoreApiKey` to store `VT_API_KEY` for the 
 
 - Unknown-file uploads are opt-in because public VirusTotal submissions can expose proprietary or sensitive files.
 - Uploads use PowerShell multipart requests instead of `curl.exe`, avoiding API-key leakage through command-line process listings.
-- The console report shows final user-facing classifications only. By default it lists only malicious and suspicious detections; use `-ShowAllEngines` for a full engine table.
+- The console report shows final user-facing classifications for all VirusTotal engines in alphabetical order.
 - Labels containing heuristic, PUA/PUP, riskware, hacktool, generic, ML, packed, or suspicious wording can be presented as `Suspicious` even when VirusTotal does not return a literal suspicious category.
 - JSON reports retain source and classification detail for SIEM, audit, and analyst workflows.
 - File-size upload limits are only applied after hash lookup and only when `-UploadUnknownFiles` is enabled. Large files can still be checked by hash without being uploadable.
