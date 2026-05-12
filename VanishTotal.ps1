@@ -34,8 +34,7 @@ param(
 Set-StrictMode -Version 3.0
 $ErrorActionPreference = 'Stop'
 
-$modulePath = Join-Path -Path $PSScriptRoot -ChildPath 'VanishTotal.Core.psm1'
-Import-Module -Name $modulePath -Force
+$script:ModulePath = Join-Path -Path $PSScriptRoot -ChildPath 'VanishTotal.Core.psm1'
 
 $script:UseColor = -not $NoColor
 
@@ -239,6 +238,8 @@ function Invoke-PauseIfNeeded {
 $exitCode = 1
 
 try {
+    Import-Module -Name $script:ModulePath -Force
+
     if ([string]::IsNullOrWhiteSpace($ApiKey)) {
         $secureApiKey = Read-Host 'Enter your VirusTotal API key' -AsSecureString
         $ApiKey = ConvertFrom-SecureStringToPlainText -SecureString $secureApiKey

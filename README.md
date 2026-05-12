@@ -6,7 +6,8 @@ VanishTotal is a PowerShell 7 file-triage tool for VirusTotal. It computes the f
 
 - `VanishTotal.ps1` - CLI and Explorer context-menu entry point.
 - `VanishTotal.Core.psm1` - VirusTotal client, retry logic, detection classification, scoring, and JSON report helpers.
-- `Add_VT_Context_Menu.reg` - optional Explorer context-menu registration.
+- `InstallVTContextMenu.ps1` - per-user Explorer context-menu installer.
+- `InstallVTContextMenu.cmd` - double-click wrapper for the context-menu installer.
 
 ## Basic Use
 
@@ -30,12 +31,32 @@ pwsh -NoProfile -File .\VanishTotal.ps1 -Path 'C:\Path\To\File.exe' -JsonReportP
 
 ## Explorer Context Menu
 
-`Add_VT_Context_Menu.reg` is a generic template for GitHub. Before importing it, replace `C:\Path\To\VanishTotal\VanishTotal.ps1` with the full path to your local `VanishTotal.ps1`.
+The supported setup method is the installer script. It registers the menu for the current Windows user, finds the local PowerShell 7 executable, unblocks the VanishTotal scripts if they were downloaded from the internet, and avoids needing administrator rights:
+
+For the simplest setup, double-click:
+
+```text
+InstallVTContextMenu.cmd
+```
+
+Or run the PowerShell installer directly:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\InstallVTContextMenu.ps1
+```
 
 The context menu adds a `Scan with VanishTotal` submenu for files. It includes:
 
 - `Normal scan`
 - `Scan and upload if unknown`
+
+On Windows 11, the entry may appear under `Show more options`.
+
+To remove the menu:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\InstallVTContextMenu.ps1 -Uninstall
+```
 
 ## API Key
 
