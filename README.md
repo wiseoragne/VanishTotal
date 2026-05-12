@@ -6,8 +6,8 @@ VanishTotal is a PowerShell 7 file-triage tool for VirusTotal. It computes the f
 
 - `VanishTotal.ps1` - CLI and Explorer context-menu entry point.
 - `VanishTotal.Core.psm1` - VirusTotal client, retry logic, detection classification, scoring, and JSON report helpers.
-- `InstallVTContextMenu.ps1` - per-user Explorer context-menu installer.
-- `InstallVTContextMenu.cmd` - double-click wrapper for the context-menu installer.
+- `VanishTotalContextMenu.ps1` - per-user Explorer context-menu manager.
+- `VanishTotalContextMenu.cmd` - double-click menu for installing or uninstalling the Explorer context menu.
 
 ## Basic Use
 
@@ -31,18 +31,18 @@ pwsh -NoProfile -File .\VanishTotal.ps1 -Path 'C:\Path\To\File.exe' -JsonReportP
 
 ## Explorer Context Menu
 
-The supported setup method is the installer script. It registers the menu for the current Windows user, finds the local PowerShell 7 executable, unblocks the VanishTotal scripts if they were downloaded from the internet, and avoids needing administrator rights:
+The supported setup method is the context-menu manager. It registers the menu for the current Windows user, finds the local PowerShell 7 executable, unblocks the VanishTotal scripts if they were downloaded from the internet, and avoids needing administrator rights:
 
-For the simplest setup, double-click:
+For the simplest setup, double-click and choose install or uninstall:
 
 ```text
-InstallVTContextMenu.cmd
+VanishTotalContextMenu.cmd
 ```
 
-Or run the PowerShell installer directly:
+Or run the PowerShell manager directly:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\InstallVTContextMenu.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File .\VanishTotalContextMenu.ps1
 ```
 
 The context menu adds a `Scan with VanishTotal` submenu for files. It includes:
@@ -55,7 +55,7 @@ On Windows 11, the entry may appear under `Show more options`.
 To remove the menu:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\InstallVTContextMenu.ps1 -Uninstall
+powershell -NoProfile -ExecutionPolicy Bypass -File .\VanishTotalContextMenu.ps1 -Uninstall
 ```
 
 ## API Key
